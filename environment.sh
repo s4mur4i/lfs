@@ -20,6 +20,7 @@ install() {
 	echo "Succesfully installed: $install"
     else 
         echo "Could not install: $install"
+	exit 1
     fi
 }
 
@@ -32,7 +33,8 @@ search diffutils 2.8.1
 search findutils 4.2.31
 search gawk 3.1.5
 search gcc 4.1.2
-search glibc 2.5.1
+search libc6 2.5.1
+# This should be glibc
 search grep 2.5.1a
 search gzip 1.3.12
 search m4 1.4.10
@@ -82,6 +84,7 @@ if [ -x dummy ]
     then echo "gcc compilation OK";
 else 
     echo "gcc compilation failed"
+    exit 1
 fi
 rm -f dummy.c dummy
 
