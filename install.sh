@@ -62,17 +62,18 @@ fi
 echo "Zeroing Disk first"
 dd if=/dev/zero of=$TARGET bs=1M >$OUT 2>&1
 echo "Done, Now creating partitions."
-fdisk $TARGET >$OUT 2>&1 <<EOF
-n
-p
-1
-1
-26
-n
-p
-2
-27
-1950
-w
-EOF
+max=`sfdisk -lsuM $TARGET 2>/dev/null | head -1`
+#fdisk $TARGET >$OUT 2>&1 <<EOF
+#n
+#p
+#1
+#1
+#26
+#n
+#p
+#2
+#27
+#1950
+#w
+#EOF
 echo "Created, Doing Filesystem."
