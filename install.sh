@@ -102,9 +102,11 @@ echo "Downloading packages"
 mkdir -v $LFS/sources
 chmod -v a+wt $LFS/sources
 echo "Download the wget-list"
-wget http://www.linuxfromscratch.org/lfs/view/development/wget-list -P $LFS/sources
-wget -i $LFS/sources/wget-list -P $LFS/sources
-wget http://www.linuxfromscratch.org/lfs/downloads/stable/md5sums -P $LFS/sources
-pushd $LFS/sources
+echo "Creating Download target"
+mkdir -pv /mnt/sources
+wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources 
+wget -nc -i /mnt/sources/wget-list -P /mnt/sources 
+wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources 
+pushd /mnt/sources
 md5sum -c md5sums
 popd
