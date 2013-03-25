@@ -1,5 +1,9 @@
 #!/bin/bash
 #### Linux from scratch install script
+# For debugging and error handling
+set -e
+# Since we are testing we need to umount previous swaps
+swapoff ${TARGET}2 || echo "No swap found from previous build."
 
 check_mount() {
     grep -q $LFS /proc/mounts
@@ -65,12 +69,12 @@ echo "Target mounted, umounting."
     do_umount
 fi
 echo "Zeroing Disk first"
-dd if=/dev/zero of=$TARGET bs=1M >$OUT 2>&1
+dd if=/dev/zero of=$TARGET bs=1M >$OUT 2>&1 || echo "DD found not round block."
 echo "Done, Now creating partitions."
 max=`sfdisk -lsuM $TARGET 2>/dev/null | head -1`
 max=$(((($max/1024)/1024)))
 if [ $max -gt 12 ] ;then
-fdisk $TARGET >$OUT 2>&1 <<EOF
+(fdisk $TARGET >$OUT 2>&1 <<EOF
 n
 p
 1
@@ -86,6 +90,7 @@ t
 82
 w
 EOF
+) || partprobe
 else
 	echo "Need more space"
 	exit 1
