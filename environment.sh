@@ -92,3 +92,4 @@ rm -f dummy.c dummy
 search gpart
 search parted
 search apt-file
+search sudo

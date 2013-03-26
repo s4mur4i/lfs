@@ -1,9 +1,5 @@
 #!/bin/bash
 #### Linux from scratch install script
-# For debugging and error handling
-set -e
-# Since we are testing we need to umount previous swaps
-swapoff ${TARGET}2 || echo "No swap found from previous build."
 
 check_mount() {
     grep -q $LFS /proc/mounts
@@ -54,19 +50,23 @@ case $OPTION in
         ;;
     esac
 done
+# For debugging and error handling
+set -e
+# Since we are testing we need to umount previous swaps
+swapoff ${TARGET}2 || echo "No swap found from previous build."
 ###
 # Main
 if [[ ! -b $TARGET ]]; then
-    echo "Target is not a block device."
-    exit 1
+    	echo "Target is not a block device."
+    	exit 1
 fi
 echo "Pretest if target mounted"
 ret=$(check_mount)
 if [ $ret -eq 1 ]; then
-echo "Not mounted continue."
+	echo "Not mounted continue."
 else
-echo "Target mounted, umounting."
-    do_umount
+	echo "Target mounted, umounting."
+    	do_umount
 fi
 echo "Zeroing Disk first"
 dd if=/dev/zero of=$TARGET bs=1M >$OUT 2>&1 || echo "DD found not round block."
@@ -74,23 +74,23 @@ echo "Done, Now creating partitions."
 max=`sfdisk -lsuM $TARGET 2>/dev/null | head -1`
 max=$(((($max/1024)/1024)))
 if [ $max -gt 12 ] ;then
-(fdisk $TARGET >$OUT 2>&1 <<EOF
-n
-p
-1
+	(fdisk $TARGET >$OUT 2>&1 <<EOF
+	n
+	p
+	1
 
-+10G
-n
-p
-2
+	+10G
+	n
+	p
+	2
 
-+2G
-t
-2
-82
-w
+	+2G
+	t
+	2
+	82
+	w
 EOF
-) || partprobe
+	) || partprobe
 else
 	echo "Need more space"
 	exit 1
@@ -109,9 +109,45 @@ chmod -v a+wt $LFS/sources
 echo "Download the wget-list"
 echo "Creating Download target"
 mkdir -pv /mnt/sources
-wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources 
-wget -nc -i /mnt/sources/wget-list -P /mnt/sources 
-wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources 
+wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources >$OUT 2>&1
+wget -nc -i /mnt/sources/wget-list -P /mnt/sources >$OUT 2>&1
+wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources >$OUT 2>&1
 pushd /mnt/sources
-md5sum -c md5sums
+md5sum -c md5sums >$OUT 2>&1
 popd
+mkdir -pv $LFS/sources
+cp /mnt/sources/* $LFS/sources/
+echo "Packages in place with correct MD5SUM"
+mkdir -v $LFS/tools
+if [ -d /tools ] ;then 
+	rm -rf /tools
+fi
+ln -sv $LFS/tools /
+echo "Tools directory ready"
+echo "Checking user and credentials"
+if id -u lfs >$OUT 2>&1;then
+	echo "User exists"
+	deluser --remove-home lfs
+	if [ -d /home/lfs ]; then
+        	rm -rf /home/lfs
+	fi
+fi
+groupadd lfs >$OUT 2>&1 || echo "Lfs group already existed"
+useradd -s /bin/bash -g lfs -m -k /dev/null lfs >$OUT 2>&1
+echo -e "test\ntest" | (passwd lfs >$OUT 2>&1)
+chown -v lfs $LFS/tools
+chown -v lfs $LFS/sources
+echo "Setting up env of lfs user"
+sudo -u lfs -H sh -c "(cat > ~/.bash_profile << EOF1
+exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+EOF1
+cat > ~/.bashrc << EOF2
+set +h
+umask 022
+LFS=/mnt/lfs
+LC_ALL=POSIX
+LFS_TGT=$(uname -m)-lfs-linux-gnu
+PATH=/tools/bin:/bin:/usr/bin
+export LFS LC_ALL LFS_TGT PATH
+EOF2
+)"
