@@ -4,7 +4,7 @@
 apt-get update >/dev/null
 search() {
     search=$1
-    ret=`dpkg --get-selections |grep install | egrep -q ^$search ; echo $?`
+    ret=`dpkg --get-selections |awk '{ print $1 }'| egrep -q ^${search}$ ; echo $?`
     if [[ $ret -eq 0 ]] ; then 
 	echo "Found package: $search"
     else 
@@ -44,7 +44,7 @@ search perl 5.8.8
 search sed 4.1.5
 search tar 1.18
 search texinfo 4.9
-search xz 5.0.0
+search xz-utils 5.0.0
 
 export LC_ALL=C
 bash --version | head -n1 | cut -d" " -f2-4
