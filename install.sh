@@ -25,6 +25,31 @@ usage() {
 EOF
 }
 
+su() {
+	args=$@
+	echo "Command to be run by lfs user: '$args'"
+	#/bin/su lfs -c "exec env -i LFS=/mnt/lfs LC_ALL=POSIX LFS_TGT=x86_64-lfs-linux-gnu PATH=/tools/bin:/bin:/usr/bin HOME=/home/lfs TERM=xterm PS1='\u:\w$ ' /bin/bash -c "$args""
+	### If debug is needed then revert to non parralel method.
+	/bin/su lfs -c "exec env -i MAKEFLAGS='-j 2' LFS=/mnt/lfs LC_ALL=POSIX LFS_TGT=x86_64-lfs-linux-gnu PATH=/tools/bin:/bin:/usr/bin HOME=/home/lfs TERM=xterm PS1='\u:\w$ ' /bin/bash -c "$args""
+	echo $?
+}
+
+extract() {
+	NAME=$1
+	#DIRECTORY=`pwd`
+	cd $LFS/sources
+	mkdir -pv $LFS/tmp >$OUT 2>&1
+	tar xf $NAME -C $LFS/tmp >$OUT 2>&1
+	echo "Successfully extract $NAME"
+	cd $LFS/tmp/*
+}
+
+remove() {
+	cd /
+	rm -rf $LFS/tmp/*	
+	echo "Removed junk from tmp, going to next build"
+}
+
 ###
 # Variables
 TARGET=/dev/sdb
@@ -51,7 +76,8 @@ case $OPTION in
     esac
 done
 # For debugging and error handling
-set -e
+set -E
+
 # Since we are testing we need to umount previous swaps
 swapoff ${TARGET}2 || echo "No swap found from previous build."
 ###
@@ -109,12 +135,13 @@ chmod -v a+wt $LFS/sources
 echo "Download the wget-list"
 echo "Creating Download target"
 mkdir -pv /mnt/sources
-wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources >$OUT 2>&1
-wget -nc -i /mnt/sources/wget-list -P /mnt/sources >$OUT 2>&1
-wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources >$OUT 2>&1
-pushd /mnt/sources
-md5sum -c md5sums >$OUT 2>&1
-popd
+## Removed for testing speed
+#wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources >$OUT 2>&1
+#wget -nc -i /mnt/sources/wget-list -P /mnt/sources >$OUT 2>&1
+#wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources >$OUT 2>&1
+#pushd /mnt/sources
+#md5sum -c md5sums >$OUT 2>&1
+#popd
 mkdir -pv $LFS/sources
 cp /mnt/sources/* $LFS/sources/
 echo "Packages in place with correct MD5SUM"
@@ -139,7 +166,7 @@ chown -v lfs $LFS/tools
 chown -v lfs $LFS/sources
 echo "Setting up env of lfs user"
 sudo -u lfs -H sh -c "(cat > ~/.bash_profile << EOF1
-exec env -i HOME=$HOME TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+exec env -i HOME=\$HOME TERM=\$TERM PS1='\u:\w\$ ' /bin/bash
 EOF1
 cat > ~/.bashrc << EOF2
 set +h
@@ -151,3 +178,18 @@ PATH=/tools/bin:/bin:/usr/bin
 export LFS LC_ALL LFS_TGT PATH
 EOF2
 )"
+echo "Starting Build phase."
+basename=`dirname $0`
+mkdir -pv $LFS/tmp >$OUT 2>&1
+chmod 777 $LFS/tmp
+## Binutils-2.22 - Pass 1
+su $basename/scripts/binutils
+
+## GCC-4.7.1 - Pass 1
+su $basename/scripts/gcc
+
+## Linux-3.5.2 API Headers
+su $basename/scripts/kernel
+
+## Glibc-2.16.0
+su $basename/scripts/glibc

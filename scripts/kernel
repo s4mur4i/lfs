@@ -1,0 +1,11 @@
+#!/bin/bash
+cd $LFS/tmp
+tar xvf $LFS/sources/linux-3.5.2.tar.xz -C $LFS/tmp 
+echo "Successfully extract linux-3.5.2.tar.xz"
+cd $LFS/tmp/linux-3.5.2
+make mrproper
+make headers_check
+make INSTALL_HDR_PATH=dest headers_install
+cp -rv dest/include/* /tools/include
+cd /
+rm -rf $LFS/tmp/*
