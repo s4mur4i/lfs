@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 cd $LFS/tmp
 tar xvf $LFS/sources/linux-3.5.2.tar.xz -C $LFS/tmp 
 echo "Successfully extract linux-3.5.2.tar.xz"

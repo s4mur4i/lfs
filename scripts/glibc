@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/bin/bash -x
+set -E
 cd $LFS/tmp
 tar xvf $LFS/sources/glibc-2.16.0.tar.xz -C $LFS/tmp 
 echo "Successfully extract glibc-2.16.0.tar.xz"
@@ -15,12 +16,12 @@ make
 make install
 echo 'main(){}' > dummy.c
 $LFS_TGT-gcc dummy.c
-readelf -l a.out | grep -q': /tools'
+readelf -l a.out | grep -q ': /tools'
 ret=$?
-if [ $ret -eq 1]; then
-	exit 100
-else
+if [ $ret -eq 0 ]; then
 	echo "Compile test okay."
+else
+	exit 100
 fi
 cd /
 rm -rf $LFS/tmp/*
