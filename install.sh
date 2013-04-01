@@ -76,7 +76,7 @@ case $OPTION in
     esac
 done
 # For debugging and error handling
-set -E
+set -e
 
 # Since we are testing we need to umount previous swaps
 swapoff ${TARGET}2 || echo "No swap found from previous build."
@@ -182,14 +182,34 @@ echo "Starting Build phase."
 basename=`dirname $0`
 mkdir -pv $LFS/tmp >$OUT 2>&1
 chmod 777 $LFS/tmp
+for i in `ls -1d $basename/scripts/*`; do 
+	if [[ ! -x $i ]] ; then
+		chmod +x $i
+	fi
+done
 ## Binutils-2.22 - Pass 1
-su $basename/scripts/binutils
+su $basename/scripts/binutils-1
 
 ## GCC-4.7.1 - Pass 1
-su $basename/scripts/gcc
+su $basename/scripts/gcc-1
 
 ## Linux-3.5.2 API Headers
 su $basename/scripts/kernel
 
 ## Glibc-2.16.0
 su $basename/scripts/glibc
+
+## Binutils-2.22 - Pass 2
+su $basename/scripts/binutils-2
+
+## GCC-4.7.1 - Pass 2
+su $basename/scripts/gcc-2
+
+## Tcl-8.5.12
+su $basename/scripts/tcl
+
+## Expect-5.45
+su $basename/scripts/expect
+
+## DejaGNU-1.5
+su $basename/scripts/dejagnu

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/dejagnu-1.5.tar.gz -C $LFS/tmp 
+echo "Successfully extract dejagnu-1.5.tar.gz"
+cd $LFS/tmp/dejagnu-1.5
+./configure --prefix=/tools
+make install
+make check
+cd /
+rm -rf $LFS/tmp/*
