@@ -3,7 +3,7 @@ set -e
 cd $LFS/tmp
 tar xvf $LFS/sources/tcl8.5.12-src.tar.gz -C $LFS/tmp 
 echo "Successfully extract tcl8.5.12-src.tar.gz"
-cd $LFS/tmp/tcl8.5.12-src
+cd $LFS/tmp/tcl8.5.12
 cd unix
 ./configure --prefix=/tools
 make
