@@ -275,8 +275,8 @@ su $basename/scripts/texinfo
 su $basename/scripts/xz
 
 echo "Toolchain complete, stripping unneccasary files"
-strip --strip-debug /tools/lib/*
-strip --strip-unneeded /tools/{,s}bin/*
+strip --strip-debug /tools/lib/* || echo "Stripping error"
+strip --strip-unneeded /tools/{,s}bin/* || echo "Stripping error"
 rm -rf /tools/{,share}/{info,man,doc}
 chown -R root:root $LFS/tools
-
+echo "Stripping complete"
