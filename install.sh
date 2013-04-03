@@ -266,7 +266,7 @@ su $basename/scripts/perl
 su $basename/scripts/sed
 
 ## Tar-1.26
-su $basename/scrips/tar
+su $basename/scripts/tar
 
 ## Texinfo-4.13a
 su $basename/scripts/texinfo
