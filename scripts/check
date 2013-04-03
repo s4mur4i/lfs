@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/check-0.9.8.tar.gz -C $LFS/tmp 
+echo "Successfully extract check-0.9.8.tar.gz"
+cd $LFS/tmp/check-0.9.8
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/patch-2.6.1.tar.bz2 -C $LFS/tmp 
+echo "Successfully extract patch-2.6.1.tar.bz2"
+cd $LFS/tmp/patch-2.6.1
+./configure --prefix=/tools
+make
+#make check
+make install
+cd /
+rm -rf $LFS/tmp/*

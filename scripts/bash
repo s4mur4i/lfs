@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/bash-4.2.tar.gz -C $LFS/tmp 
+echo "Successfully extract bash-4.2.tar.gz"
+cd $LFS/tmp/bash-4.2
+patch -Np1 -i $LFS/sources/bash-4.2-fixes-8.patch
+./configure --prefix=/tools --without-bash-malloc
+make 
+make tests
+make install 
+ln -vs bash /tools/bin/sh
+cd /
+rm -rf $LFS/tmp/*

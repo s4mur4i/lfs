@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/bzip2-1.0.6.tar.gz -C $LFS/tmp 
+echo "Successfully extract bzip2-1.0.6.tar.gz"
+cd $LFS/tmp/bzip2-1.0.6
+make
+make PREFIX=/tools install
+cd /
+rm -rf $LFS/tmp/*

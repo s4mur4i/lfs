@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/diffutils-3.2.tar.gz -C $LFS/tmp 
+echo "Successfully extract diffutils-3.2.tar.gz"
+cd $LFS/tmp/diffutils-3.2
+sed -i -e '/gets is a/d' lib/stdio.in.h
+./configure --prefix=/tools
+make 
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

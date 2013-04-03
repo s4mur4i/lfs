@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/gettext-0.18.1.1.tar.gz -C $LFS/tmp 
+echo "Successfully extract gettext-0.18.1.1.tar.gz"
+cd $LFS/tmp/gettext-0.18.1.1
+sed -i -e '/gets is a/d' gettext-*/*/stdio.in.h
+cd gettext-tools
+EMACS="no" ./configure --prefix=/tools --disable-shared
+make -C gnulib-lib
+make -C src msgfmt
+cp -v src/msgfmt /tools/bin
+cd /
+rm -rf $LFS/tmp/*

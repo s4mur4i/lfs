@@ -1,0 +1,13 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/tar-1.26.tar.bz2 -C $LFS/tmp 
+echo "Successfully extract tar-1.26.tar.bz2"
+cd $LFS/tmp/tar-1.26
+sed -i -e '/gets is a/d' gnu/stdio.in.h
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

@@ -1,0 +1,11 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/ncurses-5.9.tar.gz -C $LFS/tmp 
+echo "Successfully extract ncurses-5.9.tar.gz"
+cd $LFS/tmp/ncurses-5.9
+./configure --prefix=/tools --with-shared --without-debug --without-ada --enable-overwrite
+make
+make install
+cd /
+rm -rf $LFS/tmp/*

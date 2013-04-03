@@ -213,3 +213,70 @@ su $basename/scripts/expect
 
 ## DejaGNU-1.5
 su $basename/scripts/dejagnu
+
+## Check-0.9.8
+su $basename/scripts/check
+
+## Ncurses-5.9
+su $basename/scripts/ncurses
+
+## Bash-4.2
+su $basename/scripts/bash
+
+## Bzip2-1.0.6
+su $basename/scripts/bzip2
+
+## Coreutils-8.19
+su $basename/scripts/coreutils
+
+## Diffutils-3.2
+su $basename/scripts/diffutils
+
+## File-5.11
+su $basename/scripts/file
+
+## Findutils-4.4.2
+su $basename/scripts/findutils
+
+## Gawk-4.0.1
+su $basename/scripts/gawk
+
+## Gettext-0.18.1.1
+su $basename/scripts/gettext
+
+## Grep-2.14
+su $basename/scripts/grep
+
+## Gzip-1.5
+su $basename/scripts/gzip
+
+## M4-1.4.16
+su $basename/scripts/m4
+
+## Make-3.82
+su $basename/scripts/make
+
+## Patch-2.6.1
+su $basename/scripts/patch
+
+## Perl-5.16.1
+su $basename/scripts/perl
+
+## Sed-4.2.1
+su $basename/scripts/sed
+
+## Tar-1.26
+su $basename/scrips/tar
+
+## Texinfo-4.13a
+su $basename/scripts/texinfo
+
+## Xz-5.0.4
+su $basename/scripts/xz
+
+echo "Toolchain complete, stripping unneccasary files"
+strip --strip-debug /tools/lib/*
+strip --strip-unneeded /tools/{,s}bin/*
+rm -rf /tools/{,share}/{info,man,doc}
+chown -R root:root $LFS/tools
+

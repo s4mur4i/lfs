@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 cd $LFS/tmp
 tar xvf $LFS/sources/binutils-2.22.tar.bz2 -C $LFS/tmp 
 echo "Successfully extract $NAME"

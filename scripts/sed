@@ -1,0 +1,12 @@
+#!/bin/bash -x
+set -E
+cd $LFS/tmp
+tar xvf $LFS/sources/sed-4.2.1.tar.bz2 -C $LFS/tmp 
+echo "Successfully extract sed-4.2.1.tar.bz2"
+cd $LFS/tmp/sed-4.2.1
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

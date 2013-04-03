@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/gzip-1.5.tar.xz -C $LFS/tmp 
+echo "Successfully extract gzip-1.5.tar.xz"
+cd $LFS/tmp/gzip-1.5
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

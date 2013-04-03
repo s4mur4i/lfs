@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/texinfo-4.13a.tar.gz -C $LFS/tmp 
+echo "Successfully extract texinfo-4.13a.tar.gz"
+cd $LFS/tmp/texinfo-4.13a
+./configure --prefix=/tools
+make 
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

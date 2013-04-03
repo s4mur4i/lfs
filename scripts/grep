@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/grep-2.14.tar.xz -C $LFS/tmp 
+echo "Successfully extract grep-2.14.tar.xz"
+cd $LFS/tmp/grep-2.14
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

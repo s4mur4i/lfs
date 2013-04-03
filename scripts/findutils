@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/findutils-4.4.2.tar.gz -C $LFS/tmp 
+echo "Successfully extract findutils-4.4.2.tar.gz"
+cd $LFS/tmp/findutils-4.4.2
+./configure --prefix=/tools
+make
+make check
+make install
+cd /
+rm -rf $LFS/tmp/*

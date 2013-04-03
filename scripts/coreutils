@@ -1,0 +1,12 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/coreutils-8.19.tar.xz -C $LFS/tmp 
+echo "Successfully extract coreutils-8.19.tar.xz"
+cd $LFS/tmp/coreutils-8.19
+./configure --prefix=/tools --enable-install-program=hostname
+make
+make RUN_EXPENSIVE_TESTS=yes check
+make install
+cd /
+rm -rf $LFS/tmp/*
