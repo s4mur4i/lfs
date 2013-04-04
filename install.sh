@@ -34,6 +34,14 @@ su() {
 	echo $?
 }
 
+su_chroot() {
+    args=$@
+    echo "Command to be run n chroot: '$args'"
+    ### If debug is needed then revert to non parralel method.
+    echo $?
+}
+
+
 extract() {
 	NAME=$1
 	#DIRECTORY=`pwd`
@@ -280,3 +288,18 @@ strip --strip-unneeded /tools/{,s}bin/* || echo "Stripping error"
 rm -rf /tools/{,share}/{info,man,doc}
 chown -R root:root $LFS/tools
 echo "Stripping complete"
+
+echo "Starting to build linux"
+mkdir -v $LFS/{dev,proc,sys}
+mknod -m 600 $LFS/dev/console c 5 1
+mknod -m 666 $LFS/dev/null c 1 3
+mount -v --bind /dev $LFS/dev
+mount -vt devpts devpts $LFS/dev/pts
+mount -vt proc proc $LFS/proc
+mount -vt sysfs sysfs $LFS/sys
+if [ -h /dev/shm ]; then
+	rm -f $LFS/dev/shm
+	mkdir $LFS/dev/shm
+fi
+mount -vt tmpfs shm $LFS/dev/shm
+
