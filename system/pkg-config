@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/pkg-config-0.27.tar.gz -C /tmp 
+echo "Successfully extract pkg-config-0.27.tar.gz"
+cd /tmp/pkg-config-0.27
+./configure --prefix=/usr --with-internal-glib --docdir=/usr/share/doc/pkg-config-0.27
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

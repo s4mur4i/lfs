@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/mpc-1.0.tar.gz -C /tmp 
+echo "Successfully extract mpc-1.0.tar.gz"
+cd /tmp/mpc-1.0
+./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

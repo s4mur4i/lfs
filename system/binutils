@@ -1,0 +1,19 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/binutils-2.22.tar.bz2 -C /tmp 
+echo "Successfully extract binutils-2.22.tar.bz2"
+cd /tmp/binutils-2.22
+expect -c "spawn ls"
+rm -fv etc/standards.info
+sed -i.bak '/^INFO/s/standards.info //' etc/Makefile.in
+patch -Np1 -i /sources/binutils-2.22-build_fix-1.patch
+mkdir -v ../binutils-build
+cd ../binutils-build
+../binutils-2.22/configure --prefix=/usr --enable-shared
+make tooldir=/usr
+make -k check
+make tooldir=/usr install
+cp -v ../binutils-2.22/include/libiberty.h /usr/include
+cd /
+rm -rf /tmp/*

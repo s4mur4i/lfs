@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/file-5.11.tar.gz -C /tmp 
+echo "Successfully extract file-5.11.tar.gz"
+cd /tmp/file-5.11
+./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

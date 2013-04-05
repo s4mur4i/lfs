@@ -12,7 +12,7 @@ check_mount() {
 }
 
 do_umount() {
-	umount $LFS >$OUT 2>&1
+	umount -l $LFS >$OUT 2>&1
 }
 
 usage() {
@@ -31,7 +31,7 @@ su() {
 	#/bin/su lfs -c "exec env -i LFS=/mnt/lfs LC_ALL=POSIX LFS_TGT=x86_64-lfs-linux-gnu PATH=/tools/bin:/bin:/usr/bin HOME=/home/lfs TERM=xterm PS1='\u:\w$ ' /bin/bash -c "$args""
 	### If debug is needed then revert to non parralel method.
 	/bin/su lfs -c "exec env -i MAKEFLAGS='-j 2' LFS=/mnt/lfs LC_ALL=POSIX LFS_TGT=x86_64-lfs-linux-gnu PATH=/tools/bin:/bin:/usr/bin HOME=/home/lfs TERM=xterm PS1='\u:\w$ ' /bin/bash -c "$args""
-	echo $?
+	echo "Su completed succesfully."
 }
 
 su_chroot() {
@@ -39,6 +39,8 @@ su_chroot() {
     echo "Command to be run n chroot: '$args'"
     ### If debug is needed then revert to non parralel method.
     echo $?
+	chroot "$LFS" /tools/bin/env -i HOME=/root TERM="$TERM" \ PS1='\u:\w\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin /tools/bin/bash +h -c "$args"
+	echo "Chroot completed successfully"
 }
 
 
@@ -298,8 +300,62 @@ mount -vt devpts devpts $LFS/dev/pts
 mount -vt proc proc $LFS/proc
 mount -vt sysfs sysfs $LFS/sys
 if [ -h /dev/shm ]; then
-	rm -f $LFS/dev/shm
-	mkdir $LFS/dev/shm
+    rm -f $LFS/dev/shm
+    mkdir $LFS/dev/shm
 fi
 mount -vt tmpfs shm $LFS/dev/shm
+
+echo "Copying scripts"
+mkdir -vp $LFS/tmp2
+cp $basename/system/* $LFS/tmp2
+for i in `ls -1d $LFS/tmp2/*`; do
+    if [[ ! -x $i ]] ; then
+        chmod +x $i
+    fi
+done
+
+echo "Creating base structure"
+su_chroot /tmp2/base
+
+echo "Linux-3.5.2 API Headers"
+su_chroot /tmp2/kernel
+
+echo "Man-pages-3.42 "
+su_chroot /tmps2/man
+
+echo "Glibc-2.16.0"
+su_chroot /tmp2/glibc
+
+echo "Zlib-1.2.7"
+su_chroot /tmp2/zlib
+
+echo "File-5.11"
+su_chroot /tmp2/file
+
+echo "Binutils-2.22"
+su_chroot /tmp2/binutils
+
+echo "GMP-5.0.5"
+su_chroot /tmp2/gmp
+
+echo "MPFR-3.1.1"
+su_chroot /tmp2/mpfr
+
+echo "MPC-1.0"
+su_chroot /tmp2/mpc
+
+echo "GCC-4.7.1"
+su_chroot /tmp2/gcc
+
+echo "Sed-4.2.1"
+su_chroot /tmp2/sed
+
+echo "Bzip2-1.0.6"
+su_chroot /tmp2/bzip2
+
+echo "Pkg-config-0.27"
+su_chroot /tmp2/pkg-config
+
+echo "Deleting Scripts"
+rm -rf $LFS/tmp2
 

@@ -1,0 +1,8 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/ -C /tmp 
+echo "Successfully extract "
+cd /tmp/
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,9 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/man-pages-3.42.tar.xz -C /tmp 
+echo "Successfully extract man-pages-3.42.tar.xz"
+cd /tmp/man-pages-3.42
+make install
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,15 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/sed-4.2.1.tar.bz2 -C /tmp 
+echo "Successfully extract sed-4.2.1.tar.bz2"
+cd /tmp/sed-4.2.1
+patch -Np1 -i /sources/sed-4.2.1-testsuite_fixes-1.patch
+./configure --prefix=/usr --bindir=/bin --htmldir=/usr/share/doc/sed-4.2.1
+make
+make html
+make check
+make install
+make -C doc install-html
+cd /
+rm -rf /tmp/*
