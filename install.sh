@@ -356,6 +356,22 @@ su_chroot /tmp2/bzip2
 echo "Pkg-config-0.27"
 su_chroot /tmp2/pkg-config
 
+echo "Ncurses-5.9"
+su_chroot /tmp2/ncurses
+
+echo "Util-linux-2.21.2"
+su_chroot /tmp2/util-linux
+
+echo "Psmisc-22.19"
+su_chroot /tmp2/psmisc
+
+echo "E2fsprogs-1.42.5"
+su_chroot /tmp2/e2fsprogs
+
+
+
+
+
 echo "Deleting Scripts"
 rm -rf $LFS/tmp2
 

@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/psmisc-22.19.tar.gz -C /tmp 
+echo "Successfully extract psmisc-22.19.tar.gz"
+cd /tmp/psmisc-22.19
+./configure --prefix=/usr
+make
+make install
+mv -v /usr/bin/fuser /bin
+mv -v /usr/bin/killall /bin
+cd /
+rm -rf /tmp/*
