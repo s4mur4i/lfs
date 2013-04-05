@@ -368,9 +368,20 @@ su_chroot /tmp2/psmisc
 echo "E2fsprogs-1.42.5"
 su_chroot /tmp2/e2fsprogs
 
+echo "Shadow-4.1.5.1"
+su_chroot /tmp2/shadow
 
+echo "Coreutils-8.19"
+su_chroot /tmp2/coreutils
 
+echo "Iana-Etc-2.30"
+su_chroot /tmp2/iana
 
+echo "M4-1.4.16"
+su_chroot /tmp2/m4
+
+echo "Bison-2.6.2"
+su_chroot /tmp2/bison
 
 echo "Deleting Scripts"
 rm -rf $LFS/tmp2

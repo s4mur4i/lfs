@@ -1,0 +1,10 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/iana-etc-2.30.tar.bz2 -C /tmp 
+echo "Successfully extract iana-etc-2.30.tar.bz2"
+cd /tmp/iana-etc-2.30
+make
+make install
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,14 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/m4-1.4.16.tar.bz2 -C /tmp 
+echo "Successfully extract m4-1.4.16.tar.bz2"
+cd /tmp/m4-1.4.16
+sed -i -e '/gets is a/d' lib/stdio.in.h
+./configure --prefix=/usr
+make
+sed -i -e '41s/ENOENT/& || errno == EINVAL/' tests/test-readlink.h
+make check
+make install
+cd /
+rm -rf /tmp/*
