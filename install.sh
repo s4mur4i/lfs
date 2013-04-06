@@ -321,9 +321,11 @@ echo "Linux-3.5.2 API Headers"
 su_chroot /tmp2/kernel
 
 echo "Man-pages-3.42 "
-su_chroot /tmps2/man
+su_chroot /tmp2/man
 
 echo "Glibc-2.16.0"
+### copy Glibc fix
+cp $basename/scripts/glibc-2.16.0-res_query_fix-1.patch $LFS/sources/glibc-2.16.0-res_query_fix-1.patch
 su_chroot /tmp2/glibc
 
 echo "Zlib-1.2.7"

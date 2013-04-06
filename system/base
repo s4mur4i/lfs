@@ -1,6 +1,6 @@
 #!/tools/bin/bash
 set -e
-mkdir -pv /{bin,boot,otc/{opt,sysconfig},home,lib,mnt,opt,run}
+mkdir -pv /{bin,boot,etc/{opt,sysconfig},home,lib,mnt,opt,run}
 mkdir -pv /{media/{floppy,cdrom},sbin,srv,var}
 install -dv -m 0750 /root
 install -dv -m 1777 /tmp /var/tmp

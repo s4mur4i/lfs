@@ -55,7 +55,7 @@ ethers: files
 rpc: files
 # End /etc/nsswitch.conf
 EOF
-tar -xf ../tzdata2012e.tar.gz
+tar -xf /sources/tzdata2012e.tar.gz
 ZONEINFO=/usr/share/zoneinfo
 mkdir -pv $ZONEINFO/{posix,right}
 for tz in etcetera southamerica northamerica europe africa antarctica \
@@ -69,7 +69,7 @@ cp -v zone.tab iso3166.tab $ZONEINFO
 zic -d $ZONEINFO -p America/New_York
 unset ZONEINFO
 echo -e "8\n20\n1" |tzselect
-cp -v --remove-destination /usr/share/zoneinfo/<xxx> /etc/localtime
+cp -v --remove-destination /usr/share/zoneinfo/Europe/Budapest /etc/localtime
 cat > /etc/ld.so.conf << "EOF"
 # Begin /etc/ld.so.conf
 /usr/local/lib
