@@ -4,7 +4,8 @@ cd /tmp
 tar xvf /sources/gmp-5.0.5.tar.xz -C /tmp 
 echo "Successfully extract gmp-5.0.5.tar.xz"
 cd /tmp/gmp-5.0.5
-ABI=32 ./configure --prefix=/usr --enable-cxx --enable-mpbsd
+#ABI=32 ./configure --prefix=/usr --enable-cxx --enable-mpbsd
+./configure --prefix=/usr --enable-cxx --enable-mpbsd
 make
 make check 2>&1 | tee gmp-check-log
 awk '/tests passed/{total+=$2} ; END{print total}' gmp-check-log

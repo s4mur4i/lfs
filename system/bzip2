@@ -3,7 +3,7 @@ set -e
 cd /tmp
 tar xvf /sources/bzip2-1.0.6.tar.gz -C /tmp 
 echo "Successfully extract bzip2-1.0.6.tar.gz"
-cd /tmp/bzip2-1.0.6.tar.gz
+cd /tmp/bzip2-1.0.6
 patch -Np1 -i /sources/bzip2-1.0.6-install_docs-1.patch
 sed -i 's@\(ln -s -f \)$(PREFIX)/bin/@\1@' Makefile
 sed -i "s@(PREFIX)/man@(PREFIX)/share/man@g" Makefile

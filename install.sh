@@ -39,7 +39,7 @@ su_chroot() {
     echo "Command to be run n chroot: '$args'"
     ### If debug is needed then revert to non parralel method.
     echo $?
-	chroot "$LFS" /tools/bin/env -i HOME=/root TERM="$TERM" \ PS1='\u:\w\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin /tools/bin/bash +h -c "$args"
+	chroot "$LFS" /tools/bin/env -i MAKEFLAGS='-j 2' HOME=/root TERM="$TERM" \ PS1='\u:\w\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin /tools/bin/bash +h -c "$args"
 	echo "Chroot completed successfully"
 }
 
@@ -190,106 +190,115 @@ EOF2
 )"
 echo "Starting Build phase."
 basename=`dirname $0`
-mkdir -pv $LFS/tmp >$OUT 2>&1
-chmod 777 $LFS/tmp
-for i in `ls -1d $basename/scripts/*`; do 
-	if [[ ! -x $i ]] ; then
-		chmod +x $i
-	fi
-done
+echo "Checking for preconfigured toolchain"
+if [ -d /mnt/toolchain ]; then
+	mkdir -pv $LFS/tools
+	cp -rp /mnt/toolchain/* $LFS/tools/
+else 
+	mkdir -pv $LFS/tmp >$OUT 2>&1
+	chmod 777 $LFS/tmp
+	for i in `ls -1d $basename/scripts/*`; do 
+		if [[ ! -x $i ]] ; then
+			chmod +x $i
+		fi
+	done
 ## Binutils-2.22 - Pass 1
-su $basename/scripts/binutils-1
+	su $basename/scripts/binutils-1
 
 ## GCC-4.7.1 - Pass 1
-su $basename/scripts/gcc-1
+	su $basename/scripts/gcc-1
 
 ## Linux-3.5.2 API Headers
-su $basename/scripts/kernel
+	su $basename/scripts/kernel
 
 ## Glibc-2.16.0
-su $basename/scripts/glibc
+	su $basename/scripts/glibc
 
 ## Binutils-2.22 - Pass 2
-su $basename/scripts/binutils-2
+	su $basename/scripts/binutils-2
 
 ## GCC-4.7.1 - Pass 2
-su $basename/scripts/gcc-2
+	su $basename/scripts/gcc-2
 
 ## Tcl-8.5.12
-su $basename/scripts/tcl
+	su $basename/scripts/tcl
 
 ## Expect-5.45
-su $basename/scripts/expect
+	su $basename/scripts/expect
 
 ## DejaGNU-1.5
-su $basename/scripts/dejagnu
+	su $basename/scripts/dejagnu
 
 ## Check-0.9.8
-su $basename/scripts/check
+	su $basename/scripts/check
 
 ## Ncurses-5.9
-su $basename/scripts/ncurses
+	su $basename/scripts/ncurses
 
 ## Bash-4.2
-su $basename/scripts/bash
+	su $basename/scripts/bash
 
 ## Bzip2-1.0.6
-su $basename/scripts/bzip2
+	su $basename/scripts/bzip2
 
 ## Coreutils-8.19
-su $basename/scripts/coreutils
+	su $basename/scripts/coreutils
 
 ## Diffutils-3.2
-su $basename/scripts/diffutils
+	su $basename/scripts/diffutils
 
 ## File-5.11
-su $basename/scripts/file
+	su $basename/scripts/file
 
 ## Findutils-4.4.2
-su $basename/scripts/findutils
+	su $basename/scripts/findutils
 
 ## Gawk-4.0.1
-su $basename/scripts/gawk
+	su $basename/scripts/gawk
 
 ## Gettext-0.18.1.1
-su $basename/scripts/gettext
+	su $basename/scripts/gettext
 
 ## Grep-2.14
-su $basename/scripts/grep
+	su $basename/scripts/grep
 
 ## Gzip-1.5
-su $basename/scripts/gzip
+	su $basename/scripts/gzip
 
 ## M4-1.4.16
-su $basename/scripts/m4
+	su $basename/scripts/m4
 
 ## Make-3.82
-su $basename/scripts/make
+	su $basename/scripts/make
 
 ## Patch-2.6.1
-su $basename/scripts/patch
+	su $basename/scripts/patch
 
 ## Perl-5.16.1
-su $basename/scripts/perl
+	su $basename/scripts/perl
 
 ## Sed-4.2.1
-su $basename/scripts/sed
+	su $basename/scripts/sed
 
 ## Tar-1.26
-su $basename/scripts/tar
+	su $basename/scripts/tar
 
 ## Texinfo-4.13a
-su $basename/scripts/texinfo
+	su $basename/scripts/texinfo
 
 ## Xz-5.0.4
-su $basename/scripts/xz
+	su $basename/scripts/xz
 
-echo "Toolchain complete, stripping unneccasary files"
-strip --strip-debug /tools/lib/* || echo "Stripping error"
-strip --strip-unneeded /tools/{,s}bin/* || echo "Stripping error"
-rm -rf /tools/{,share}/{info,man,doc}
-chown -R root:root $LFS/tools
-echo "Stripping complete"
+	echo "Toolchain complete, stripping unneccasary files"
+	strip --strip-debug /tools/lib/* || echo "Stripping error"
+	strip --strip-unneeded /tools/{,s}bin/* || echo "Stripping error"
+	rm -rf /tools/{,share}/{info,man,doc}
+	chown -R root:root $LFS/tools
+	echo "Stripping complete"
+	echo "Copying for further use."
+	mkdir -pv /mnt/toolchain
+	cp -rp $LFS/tools/* /mnt/toolchain/
+fi
 
 echo "Starting to build linux"
 mkdir -v $LFS/{dev,proc,sys}

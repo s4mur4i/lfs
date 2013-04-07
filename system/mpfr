@@ -3,7 +3,7 @@ set -e
 cd /tmp
 tar xvf /sources/mpfr-3.1.1.tar.xz -C /tmp 
 echo "Successfully extract mpfr-3.1.1.tar.xz"
-cd /tmp/mpfr-3.1.1.tar.xz
+cd /tmp/mpfr-3.1.1
 ./configure --prefix=/usr --enable-thread-safe --docdir=/usr/share/doc/mpfr-3.1.1
 make
 make check

@@ -3,7 +3,7 @@ set -e
 cd /tmp
 tar xvf /sources/util-linux-2.21.2.tar.xz -C /tmp 
 echo "Successfully extract util-linux-2.21.2.tar.xz"
-cd /tmp/util-linux-2.21.2.tar.xz
+cd /tmp/util-linux-2.21.2
 sed -i -e 's@etc/adjtime@var/lib/hwclock/adjtime@g' \
 $(grep -rl '/etc/adjtime' .)
 mkdir -pv /var/lib/hwclock

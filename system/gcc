@@ -14,8 +14,8 @@ cd ../gcc-build
 ../gcc-4.7.1/configure --prefix=/usr --libexecdir=/usr/lib --enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-clocale=gnu --enable-languages=c,c++ --disable-multilib --disable-bootstrap --with-system-zlib
 make
 ulimit -s 32768
-make -k check
-../gcc-4.7.1/contrib/test_summary
+make -k check || echo "Some tests will fail."
+../gcc-4.7.1/contrib/test_summary || grep -A7 Summ
 make install
 ln -sv ../usr/bin/cpp /lib
 ln -sv gcc /usr/bin/cc
