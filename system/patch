@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/patch-2.6.1.tar.bz2 -C /tmp 
+echo "Successfully extract patch-2.6.1.tar.bz2"
+cd /tmp/patch-2.6.1
+patch -Np1 -i /sources/patch-2.6.1-test_fix-1.patch
+./configure --prefix=/usr
+make
+make -k check
+make install
+cd /
+rm -rf /tmp/*

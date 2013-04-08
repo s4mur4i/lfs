@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/libpipeline-1.2.1.tar.gz -C /tmp 
+echo "Successfully extract libpipeline-1.2.1.tar.gz"
+cd /tmp/libpipeline-1.2.1
+sed -i -e '/gets is a/d' gnulib/lib/stdio.in.h
+PKG_CONFIG_PATH=/tools/lib/pkgconfig ./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/xz-5.0.4.tar.xz -C /tmp 
+echo "Successfully extract xz-5.0.4.tar.xz"
+cd /tmp/xz-5.0.4
+./configure --prefix=/usr --libdir=/lib --docdir=/usr/share/doc/xz-5.0.4
+make
+make check
+make pkgconfigdir=/usr/lib/pkgconfig install
+cd /
+rm -rf /tmp/*

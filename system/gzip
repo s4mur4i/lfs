@@ -1,0 +1,14 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/gzip-1.5.tar.xz -C /tmp 
+echo "Successfully extract gzip-1.5.tar.xz"
+cd /tmp/gzip-1.5
+./configure --prefix=/usr --bindir=/bin
+make
+make check
+make install
+mv -v /bin/{gzexe,uncompress,zcmp,zdiff,zegrep} /usr/bin
+mv -v /bin/{zfgrep,zforce,zgrep,zless,zmore,znew} /usr/bin
+cd /
+rm -rf /tmp/*

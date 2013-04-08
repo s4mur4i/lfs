@@ -1,0 +1,11 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/less-444.tar.gz -C /tmp 
+echo "Successfully extract less-444.tar.gz"
+cd /tmp/less-444
+./configure --prefix=/usr --sysconfdir=/etc
+make
+make install
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/groff-1.21.tar.gz -C /tmp 
+echo "Successfully extract groff-1.21.tar.gz"
+cd /tmp/groff-1.21
+PAGE=A4 ./configure --prefix=/usr
+make
+make install
+ln -sv eqn /usr/bin/geqn
+ln -sv tbl /usr/bin/gtbl
+cd /
+rm -rf /tmp/*

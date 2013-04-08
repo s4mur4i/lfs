@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/make-3.82.tar.bz2 -C /tmp 
+echo "Successfully extract make-3.82.tar.bz2"
+cd /tmp/make-3.82
+patch -Np1 -i /sources/make-3.82-upstream_fixes-2.patch
+./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/sysvinit-2.88dsf.tar.bz2 -C /tmp 
+echo "Successfully extract sysvinit-2.88dsf.tar.bz2"
+cd /tmp/sysvinit-2.88dsf
+sed -i 's@Sending processes@& configured via /etc/inittab@g' src/init.c
+sed -i -e 's/utmpdump wall/utmpdump/' -e '/= mountpoint/d' -e 's/mountpoint.1 wall.1//' src/Makefile
+make -C src
+make -C src install
+cd /
+rm -rf /tmp/*

@@ -39,11 +39,16 @@ su_chroot() {
     args=$@
     echo "Command to be run n chroot: '$args'"
     ### If debug is needed then revert to non parralel method.
-    echo $?
 	chroot "$LFS" /tools/bin/env -i MAKEFLAGS='-j 2' HOME=/root TERM="$TERM" \ PS1='\u:\w\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/tools/bin /tools/bin/bash +h -c "$args"
 	echo "Chroot completed successfully"
 }
 
+su_chroot2() {
+	args=$@
+	echo "Command to be run n chroot: '$args'"
+	chroot "$LFS" /usr/bin/env -i HOME=/root TERM="$TERM" PS1='\u:\w\$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin /bin/bash -c "$args"
+	echo "Chroot completed successfully"
+}
 
 extract() {
 	NAME=$1
@@ -440,5 +445,63 @@ su_chroot /tmp2/flex
 echo "Gettext-0.18.1.1"
 su_chroot /tmp2/gettext
 
+echo "Groff-1.21"
+su_chroot /tmp2/groff
+
+echo "Xz-5.0.4"
+su_chroot /tmp2/xz
+
+echo "Grub-2.00"
+su_chroot /tmp2/grub
+
+echo "Less-444"
+su_chroot /tmp2/less
+
+echo "Gzip-1.5"
+su_chroot /tmp2/gzip
+
+echo "Iproute2-3.5.1"
+su_chroot /tmp2/iproute
+
+echo "Kbd-1.15.3"
+su_chroot /tmp2/kbd
+
+echo "Kmod-9"
+su_chroot /tmp2/kmod
+
+echo "Libpipeline-1.2.1"
+su_chroot /tmp2/libpipeline
+
+echo "Make-3.82"
+su_chroot /tmp2/make
+
+echo "Man-DB-2.6.2"
+su_chroot /tmp2/man-db
+
+echo "Patch-2.6.1"
+su_chroot /tmp2/patch
+
+echo "Syslogd-1.5"
+su_chroot /tmp2/syslogd
+
+echo "Sysvinit-2.88dsf"
+su_chroot /tmp2/sysvinit
+
+echo "Tar-1.26"
+su_chroot /tmp2/tar
+
+echo "Texinfo-4.13a"
+su_chroot /tmp2/texinfo
+
+echo "Udev-188"
+su_chroot /tmp2/udev
+
+echo "Vim-7.3"
+su_chroot /tmp2/vim
+
 echo "Deleting Scripts"
 rm -rf $LFS/tmp2
+
+su_chroot "/tools/bin/find /{,usr/}{bin,lib,sbin} -type f -exec /tools/bin/strip --strip-debug '{}' ';'" || echo "Stripping failures"
+
+"
