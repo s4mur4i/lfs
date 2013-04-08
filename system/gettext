@@ -1,0 +1,13 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/gettext-0.18.1.1.tar.gz -C /tmp 
+echo "Successfully extract gettext-0.18.1.1.tar.gz"
+cd /tmp/gettext-0.18.1.1
+sed -i -e '/gets is a/d' gettext-*/*/stdio.in.h
+./configure --prefix=/usr --docdir=/usr/share/doc/gettext-0.18.1.1
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

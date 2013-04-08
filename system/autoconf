@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/autoconf-2.69.tar.xz -C /tmp 
+echo "Successfully extract autoconf-2.69.tar.xz"
+cd /tmp/autoconf-2.69
+./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

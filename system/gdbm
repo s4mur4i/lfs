@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/gdbm-1.10.tar.gz -C /tmp 
+echo "Successfully extract gdbm-1.10.tar.gz"
+cd /tmp/gdbm-1.10
+./configure --prefix=/usr --enable-libgdbm-compat
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

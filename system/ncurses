@@ -22,9 +22,9 @@ ln -sfv libncursesw.a /usr/lib/libcursesw.a
 ln -sfv libncurses.a /usr/lib/libcurses.a
 mkdir -v /usr/share/doc/ncurses-5.9
 cp -v -R doc/* /usr/share/doc/ncurses-5.9
-make distclean
-./configure --prefix=/usr --with-shared --without-normal --without-debug --without-cxx-binding
-make sources libs
-cp -av lib/lib*.so.5* /usr/lib
+#make distclean
+#./configure --prefix=/usr --with-shared --without-normal --without-debug --without-cxx-binding
+#make sources libs
+#cp -av lib/lib*.so.5* /usr/lib
 cd /
 rm -rf /tmp/*

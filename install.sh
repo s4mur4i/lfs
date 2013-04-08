@@ -12,6 +12,7 @@ check_mount() {
 }
 
 do_umount() {
+	for i in `mount |grep '/mnt/lfs/' |awk '{print $3}'` ; do umount -f $i >$OUT 2>&1 ; done
 	umount -l $LFS >$OUT 2>&1
 }
 
@@ -394,6 +395,50 @@ su_chroot /tmp2/m4
 echo "Bison-2.6.2"
 su_chroot /tmp2/bison
 
+echo "Procps-3.2.8"
+su_chroot /tmp2/procps
+
+echo "Grep-2.14"
+su_chroot /tmp2/grep
+
+echo "Readline-6.2"
+su_chroot /tmp2/readline
+
+echo "Bash-4.2"
+su_chroot /tmp2/bash
+
+echo "Libtool-2.4.2"
+su_chroot /tmp2/libtool
+
+echo "GDBM-1.10"
+su_chroot /tmp2/gdbm
+
+echo "Inetutils-1.9.1"
+su_chroot /tmp2/inetutils
+
+echo "Perl-5.16.1"
+su_chroot /tmp2/perl
+
+echo "Autoconf-2.69"
+su_chroot /tmp2/autoconf
+
+echo "Automake-1.12.3"
+su_chroot /tmp2/automake
+
+echo "Diffutils-3.2"
+su_chroot /tmp2/diffutils
+
+echo "Gawk-4.0.1"
+su_chroot /tmp2/gawk
+
+echo "Findutils-4.4.2"
+su_chroot /tmp2/findutils
+
+echo "Flex-2.5.37"
+su_chroot /tmp2/flex
+
+echo "Gettext-0.18.1.1"
+su_chroot /tmp2/gettext
+
 echo "Deleting Scripts"
 rm -rf $LFS/tmp2
-

@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/libtool-2.4.2.tar.gz -C /tmp 
+echo "Successfully extract libtool-2.4.2.tar.gz"
+cd /tmp/libtool-2.4.2
+./configure --prefix=/usr
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

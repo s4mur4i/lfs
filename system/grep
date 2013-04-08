@@ -1,0 +1,12 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/grep-2.14.tar.xz -C /tmp 
+echo "Successfully extract grep-2.14.tar.xz"
+cd /tmp/grep-2.14
+./configure --prefix=/usr --bindir=/bin
+make
+make check
+make install
+cd /
+rm -rf /tmp/*

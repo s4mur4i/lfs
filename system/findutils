@@ -1,0 +1,14 @@
+#!/tools/bin/bash
+set -e
+cd /tmp
+tar xvf /sources/findutils-4.4.2.tar.gz -C /tmp 
+echo "Successfully extract findutils-4.4.2.tar.gz"
+cd /tmp/findutils-4.4.2
+./configure --prefix=/usr --libexecdir=/usr/lib/findutils --localstatedir=/var/lib/locate
+make
+make check
+make install
+mv -v /usr/bin/find /bin
+sed -i 's/find:=${BINDIR}/find:=\/bin/' /usr/bin/updatedb
+cd /
+rm -rf /tmp/*
