@@ -12,6 +12,7 @@ check_mount() {
 }
 
 do_umount() {
+	for i in `mount |grep '/mnt/lfs/dev/' |awk '{print $3}'` ; do umount -f $i >$OUT 2>&1 ; done
 	for i in `mount |grep '/mnt/lfs/' |awk '{print $3}'` ; do umount -f $i >$OUT 2>&1 ; done
 	umount -l $LFS >$OUT 2>&1
 }
