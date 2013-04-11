@@ -154,7 +154,9 @@ echo "Creating Download target"
 mkdir -pv /mnt/sources
 ## Removed for testing speed
 #wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/wget-list -P /mnt/sources >$OUT 2>&1
-#wget -nc -i /mnt/sources/wget-list -P /mnt/sources >$OUT 2>&1
+echo "Use local list with additional patches"
+basename=`dirname $0`
+wget -nc -i $basename/wget-list -P /mnt/sources >$OUT 2>&1
 #wget -nc http://www.linuxfromscratch.org/lfs/downloads/7.2-rc1/md5sums -P /mnt/sources >$OUT 2>&1
 #pushd /mnt/sources
 #md5sum -c md5sums >$OUT 2>&1
