@@ -3,7 +3,7 @@ set -e
 cd /tmp
 tar xvf /sources/udev-lfs-188-3.tar.bz2 -C /tmp 
 echo "Successfully extract udev-lfs-188-3.tar.bz2"
-cd /tmp/udev/lfs-188
+cd /tmp/udev-lfs-188
 make -f udev-lfs-188/Makefile.lfs
 make -f udev-lfs-188/Makefile.lfs install
 bash udev-lfs-188/init-net-rules.sh
