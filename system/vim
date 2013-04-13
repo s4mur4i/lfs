@@ -3,7 +3,7 @@ set -e
 cd /tmp
 tar xvf /sources/vim-7.3.tar.bz2 -C /tmp 
 echo "Successfully extract vim-7.3.tar.bz2"
-cd /tmp/vim-7.3
+cd /tmp/vim73
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr --enable-multibyte
 make
