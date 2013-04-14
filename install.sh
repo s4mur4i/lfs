@@ -506,4 +506,7 @@ echo "Deleting Scripts"
 rm -rf $LFS/tmp2
 
 su_chroot "/tools/bin/find /{,usr/}{bin,lib,sbin} -type f -exec /tools/bin/strip --strip-debug '{}' ';'" || echo "Stripping failures"
+echo "Completed Stripping"
+
+echo "Linux install ready. Configuring"
 
