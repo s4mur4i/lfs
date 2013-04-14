@@ -7,7 +7,8 @@ cd /tmp/vim73
 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 ./configure --prefix=/usr --enable-multibyte
 make
-make test >/tmp/log 2>&1 || echo "Some errors with tests"
+# The tests hangs, but is successful according to logs.
+#make test >/tmp/log 2>&1 || echo "Some errors with tests"
 make install
 ln -sv vim /usr/bin/vi
 for L in /usr/share/man/{,*/}man1/vim.1; do
