@@ -510,3 +510,95 @@ echo "Completed Stripping"
 
 echo "Linux install ready. Configuring"
 
+echo "Network config"
+echo -e "#Some random comment\nSUBSYSTEM==\"net\" ACTION==\"add\" DRIVERS==\"?*\" ATTR{address} ATTR{type}==\"1\" KERNEL==\"eth*\" NAME" >$LFS/etc/udev/rules.d/70-persistent-net.rules
+
+echo -e "ONBOOT=yes\nIFACE=eth0\nSERVICE=ipv4-static\nIP=192.168.120.2\nGATEWAY=192.168.120.1\nPREFIX=24\nBROADCAST=192.168.120.255" > $LFS/etc/sysconfig/ifconfig.eth0
+
+echo -e "domain test.local\nnameserver 8.8.8.8\nnameserver 8.8.4.4" > $LFS/etc/resvolc.conf
+
+echo -e "127.0.0.1 localhost\n192.168.120.2 lfs.test.local" > $LFS/etc/hosts
+
+echo "Udev configuration"
+mkdir -p $LFS/etc/modprobe.d
+echo "softdep snd-pcm post: snd-pcm-oss" > $LFS/etc/modprobe.d/alias.conf
+
+echo "blacklist forte" > $LFS/etc/modprobe.d/blacklist.conf
+
+echo "Installing bootscripts"
+su $basename/scripts/bootscripts
+
+echo "Create inittab"
+cat > $LFS/etc/inittab << "EOF"
+# Begin /etc/inittab
+id:3:initdefault:
+si::sysinit:/etc/rc.d/init.d/rc S
+l0:0:wait:/etc/rc.d/init.d/rc 0
+l1:S1:wait:/etc/rc.d/init.d/rc 1
+l2:2:wait:/etc/rc.d/init.d/rc 2
+l3:3:wait:/etc/rc.d/init.d/rc 3
+l4:4:wait:/etc/rc.d/init.d/rc 4
+l5:5:wait:/etc/rc.d/init.d/rc 5
+l6:6:wait:/etc/rc.d/init.d/rc 6
+ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
+su:S016:once:/sbin/sulogin
+1:2345:respawn:/sbin/agetty
+2:2345:respawn:/sbin/agetty
+3:2345:respawn:/sbin/agetty
+4:2345:respawn:/sbin/agetty
+5:2345:respawn:/sbin/agetty
+6:2345:respawn:/sbin/agetty
+--noclear tty1 9600
+tty2 9600
+tty3 9600
+tty4 9600
+tty5 9600
+tty6 9600
+# End /etc/inittab
+EOF
+
+mkdir -p $LFS/etc/sysconfig
+echo "HOSTNAME=localhost" > $LFS/etc/sysconfig/network
+
+cat > $LFS/etc/sysconfig/clock << "EOF"
+# Begin /etc/sysconfig/clock
+UTC=1
+# Set this to any options you might need to give to hwclock,
+# such as machine hardware clock type for Alphas.
+CLOCKPARAMS=
+# End /etc/sysconfig/clock
+EOF
+
+cat > $LFS/etc/sysconfig/console << "EOF"
+# Begin /etc/sysconfig/console
+UNICODE="1"
+KEYMAP="de-latin1"
+KEYMAP_CORRECTIONS="euro2"
+LEGACY_CHARSET="iso-8859-15"
+FONT="LatArCyrHeb-16 -m 8859-15"
+# End /etc/sysconfig/console
+EOF
+
+echo "SYSKLOGD_PARMS=-m 0 " >> $LFS/etc/sysconfig/rc.site
+
+cat > $LFS/etc/profile << "EOF"
+# Begin /etc/profile
+export LANG=<ll>_<CC>.<charmap><@modifiers>
+# End /etc/profile
+EOF
+
+cat > $LFS/etc/fstab << "EOF"
+# Begin /etc/fstab
+# file system mount-point type options dump fsck
+# order
+/dev/sda1 / <fff> defaults 1 1
+/dev/sda2 swap swap pri=1 0 0
+proc /proc proc nosuid,noexec,nodev 0 0
+sysfs /sys sysfs nosuid,noexec,nodev 0 0
+devpts /dev/pts devpts gid=5,mode=620 0 0
+tmpfs /run tmpfs defaults 0 0
+devtmpfs /dev devtmpfs mode=0755,nosuid 0 0
+# End /etc/fstab
+EOF
+
+

@@ -1,0 +1,9 @@
+#!/bin/bash
+set -e
+cd $LFS/tmp
+tar xvf $LFS/sources/lfs-bootscripts-20120725.tar.bz2 -C $LFS/tmp 
+echo "Successfully extract lfs-bootscripts-20120725.tar.bz2"
+cd $LFS/tmp/lfs-bootscripts-20120725
+make install
+cd /
+rm -rf $LFS/tmp/*
