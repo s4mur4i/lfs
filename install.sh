@@ -601,4 +601,19 @@ devtmpfs /dev devtmpfs mode=0755,nosuid 0 0
 # End /etc/fstab
 EOF
 
+echo "Installing kernel"
+su $basename/scripts/kernel2
+
+su_chroot /tmp2/grub-setup
+
+echo "Setting last files"
+echo 7.2 > $LFS/etc/lfs-release
+
+cat > $LFS/etc/lsb-release << "EOF"
+DISTRIB_ID="Linux From Scratch"
+DISTRIB_RELEASE="7.2"
+DISTRIB_CODENAME="<your name here>"
+DISTRIB_DESCRIPTION="Linux From Scratch"
+EOF
+
 
