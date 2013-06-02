@@ -326,6 +326,7 @@ mount -vt tmpfs shm $LFS/dev/shm
 echo "Copying scripts"
 mkdir -vp $LFS/tmp2
 cp $basename/system/* $LFS/tmp2
+cp $basename/system/.* $LFS/tmp2
 for i in `ls -1d $LFS/tmp2/*`; do
     if [[ ! -x $i ]] ; then
         chmod +x $i
@@ -502,8 +503,8 @@ su_chroot /tmp2/udev
 echo "Vim-7.3"
 su_chroot /tmp2/vim
 
-echo "Deleting Scripts"
-rm -rf $LFS/tmp2
+#echo "Deleting Scripts"
+#rm -rf $LFS/tmp2
 
 su_chroot "/tools/bin/find /{,usr/}{bin,lib,sbin} -type f -exec /tools/bin/strip --strip-debug '{}' ';'" || echo "Stripping failures"
 echo "Completed Stripping"
@@ -526,7 +527,7 @@ echo "softdep snd-pcm post: snd-pcm-oss" > $LFS/etc/modprobe.d/alias.conf
 echo "blacklist forte" > $LFS/etc/modprobe.d/blacklist.conf
 
 echo "Installing bootscripts"
-su $basename/scripts/bootscripts
+su_chroot /tmp2/bootscripts
 
 echo "Create inittab"
 cat > $LFS/etc/inittab << "EOF"
@@ -602,7 +603,7 @@ devtmpfs /dev devtmpfs mode=0755,nosuid 0 0
 EOF
 
 echo "Installing kernel"
-su $basename/scripts/kernel2
+su_chroot /tmp2/kernel2
 
 su_chroot /tmp2/grub-setup
 
@@ -616,4 +617,5 @@ DISTRIB_CODENAME="<your name here>"
 DISTRIB_DESCRIPTION="Linux From Scratch"
 EOF
 
-
+echo "Deleting Scripts"
+rm -rf $LFS/tmp2
